@@ -1,0 +1,6 @@
+pyaudio
+wave
+flask
+flask_socketio
+azure-core
+azure-cognitiveservices-speech

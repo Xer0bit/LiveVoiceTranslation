@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Continuous Speech Translation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        #translation {
+            font-size: 24px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            /* Default text shadow for outline */
+            text-shadow: 1px 1px 2px #000;
+        }
+        #translation.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .controls {
+            margin-top: 20px;
+            /* Fix position at bottom */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+        .controls input[type="color"],
+        .controls input[type="range"] {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <h1>Continuous Speech Translation</h1> -->
+    <div id="translation">Translated text will appear here...</div>
+
+    <div class="controls">
+        <label for="fontSize">Font Size:</label>
+        <input type="range" id="fontSize" name="fontSize" min="16" max="72" value="24">
+        <label for="color">Text Color:</label>
+        <input type="color" id="color" name="color" value="#000000">
+        <label for="outlineColor">Outline Color:</label>
+        <input type="color" id="outlineColor" name="outlineColor" value="#000000">
+        <label for="outlineSize">Outline Size:</label>
+        <input type="range" id="outlineSize" name="outlineSize" min="0" max="10" value="2">
+    </div>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            console.log('WebSocket connected!');
+        });
+
+        socket.on('new_translation', function(msg) {
+            console.log('Received translation:', msg.data);
+            var translationDiv = document.getElementById('translation');
+            translationDiv.classList.remove('show');
+            setTimeout(function() {
+                translationDiv.innerText = msg.data;
+                translationDiv.classList.add('show');
+            }, 300);
+        });
+
+        // Adjust the font size of the translated text
+        document.getElementById('fontSize').addEventListener('input', function(event) {
+            var translationDiv = document.getElementById('translation');
+            translationDiv.style.fontSize = event.target.value + 'px';
+        });
+
+        // Adjust the color of the translated text
+        document.getElementById('color').addEventListener('input', function(event) {
+            var translationDiv = document.getElementById('translation');
+            translationDiv.style.color = event.target.value;
+        });
+
+        // Adjust the outline color and size of the translated text
+        function updateTextShadow() {
+            var translationDiv = document.getElementById('translation');
+            var outlineColor = document.getElementById('outlineColor').value;
+            var outlineSize = document.getElementById('outlineSize').value;
+            translationDiv.style.textShadow = `
+                ${outlineSize}px ${outlineSize}px ${outlineSize}px ${outlineColor},
+                -${outlineSize}px -${outlineSize}px ${outlineSize}px ${outlineColor},
+                -${outlineSize}px ${outlineSize}px ${outlineSize}px ${outlineColor},
+                ${outlineSize}px -${outlineSize}px ${outlineSize}px ${outlineColor}
+            `;
+        }
+
+        document.getElementById('outlineColor').addEventListener('input', updateTextShadow);
+        document.getElementById('outlineSize').addEventListener('input', updateTextShadow);
+    </script>
+</body>
+</html>
