@@ -44,7 +44,9 @@ through any web interface.
 
 **Working Chart**
 --------------------
-![Flowchart illustrating the steps involved in using VocalTranslate](https://github.com/Xer0bit/LiveVoiceTranslation/blob/main/templates/chart.png)
+<div align="center">
+  ![Flowchart illustrating the steps involved in using VocalTranslate](https://github.com/Xer0bit/LiveVoiceTranslation/blob/main/templates/chart.png)
+</div>
 
 **Getting Started**
 -------------------
