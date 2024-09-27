@@ -42,6 +42,9 @@ through any web interface.
 * **HTML/CSS**: For building the web interface.
 * **Python**: For backend logic and API communication.
 
+**Working Chart**
+![Flowchart illustrating the steps involved in using VocalTranslate](https://github.com/Xer0bit/LiveVoiceTranslation/blob/main/templates/chart.png)
+
 **Getting Started**
 -------------------
 
